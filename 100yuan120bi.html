@@ -1,22 +1,20 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <title>购买成功</title>
-    <style>
-        body {
-            font-family: "微软雅黑", sans-serif;
-            text-align: center;
-            padding-top: 100px;
-            background-color: #f0f8ff;
-        }
-        h1 {
-            color: #228B22;
-            font-size: 36px;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>支付成功</title>
 </head>
 <body>
-    <h1>100元120币购买成功</h1>
+  <h1>支付成功！币数已+120</h1>
+  <script>
+    // 向 LocalStorage 写入“支付成功”标记（TurboWarp 会监听这个键）
+    localStorage.setItem('paymentSuccess', 'true');
+    
+    // 可选：3秒后自动关闭页面（若在手机浏览器中）
+    setTimeout(() => {
+      window.close();
+    }, 3000);
+  </script>
 </body>
 </html>

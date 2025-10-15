@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2元购买2币</title>
+    <style>
+        body { text-align: center; padding: 50px; font-family: Arial; }
+        .success { color: green; font-size: 20px; margin-top: 30px; }
+    </style>
+</head>
+<body>
+    <h1>2元 = 2币</h1>
+    <button onclick="confirmPayment(2)">确认支付成功</button>
+    <div class="success" id="successMsg"></div>
+
+    <script>
+        function confirmPayment(coins) {
+            const blob = new Blob([coins.toString()], { type: 'text/plain' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'coins.txt';
+            a.click();
+
+            document.getElementById('successMsg').textContent = `购买成功！已获得${coins}币，文件已保存`;
+            
+            setTimeout(() => {
+                alert('请回到TurboWarp软件，币数将自动增加');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
+    

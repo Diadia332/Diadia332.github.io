@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1元购买1币</title>
+    <style>
+        body { text-align: center; padding: 50px; font-family: Arial; }
+        .success { color: green; font-size: 20px; margin-top: 30px; }
+    </style>
+</head>
+<body>
+    <h1>1元 = 1币</h1>
+    <button onclick="confirmPayment(1)">确认支付成功</button>
+    <div class="success" id="successMsg"></div>
+
+    <script>
+        // 支付成功后生成币数文件
+        function confirmPayment(coins) {
+            // 创建包含币数的文本文件
+            const blob = new Blob([coins.toString()], { type: 'text/plain' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'coins.txt'; // 固定文件名，TurboWarp会读取这个文件
+            a.click();
+
+            // 显示成功信息
+            document.getElementById('successMsg').textContent = `购买成功！已获得${coins}币，文件已保存`;
+            
+            // 3秒后提示用户回到TurboWarp
+            setTimeout(() => {
+                alert('请回到TurboWarp软件，币数将自动增加');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
+    
+    

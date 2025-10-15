@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>自定义购买币数</title>
+    <style>
+        body { text-align: center; padding: 30px; font-family: Arial; }
+        input { padding: 8px; margin: 10px; width: 150px; }
+        button { padding: 10px 20px; background: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        .success { color: green; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>自定义购买</h1>
+    <div>
+        <input type="number" id="coins" placeholder="输入获得的币数" min="1">
+    </div>
+    <button onclick="confirmPayment()">确认支付成功</button>
+    <div class="success" id="successMsg"></div>
+
+    <script>
+        function confirmPayment() {
+            const coins = document.getElementById('coins').value;
+            if (!coins || coins < 1) {
+                alert('请输入有效的币数');
+                return;
+            }
+
+            // 生成包含币数的文件
+            const blob = new Blob([coins], { type: 'text/plain' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'coins.txt';
+            a.click();
+
+            document.getElementById('successMsg').textContent = `购买成功！已获得${coins}币，文件已保存`;
+            
+            setTimeout(() => {
+                alert('请回到TurboWarp软件，币数将自动增加');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
+    

@@ -1,0 +1,44 @@
+body {
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  background-color: #f0f0f0;
+}
+
+.game-container {
+  text-align: center;
+  background-color: white;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+#guessInput {
+  padding: 0.5rem;
+  font-size: 1rem;
+  width: 150px;
+  margin: 1rem 0;
+}
+
+#guessBtn {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#guessBtn:hover {
+  background-color: #45a049;
+}
+
+#resultText {
+  margin-top: 1rem;
+  font-size: 1.1rem;
+  color: #333;
+}

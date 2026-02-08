@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>谢北方音乐下载</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: "Microsoft YaHei", sans-serif;
+            background: #f8f9fa;
+            text-align: center;
+            padding: 60px 20px;
+        }
+        .box {
+            max-width: 380px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 40px 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        .title {
+            font-size: 24px;
+            color: #222;
+            margin-bottom: 30px;
+            font-weight: 500;
+        }
+        .download-btn {
+            display: block;
+            width: 100%;
+            height: 56px;
+            line-height: 56px;
+            background: #2ea44f;
+            color: #fff;
+            font-size: 18px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background 0.2s;
+            cursor: pointer;
+        }
+        .download-btn:hover {
+            background: #2c974b;
+        }
+        .tip {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+        }
+        .test-tip {
+            color: #ff6347;
+            margin-top: 10px;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h1 class="title">谢北方音乐下载</h1>
+        
+        <!-- 修复核心：去掉download属性，改用新窗口打开链接（本地/公网都可用） -->
+        <a href="https://cdn.jsdelivr.net/gh/Diadia332/Diadia332.github.io/XieBeiFang.zip" 
+           class="download-btn"
+           target="_blank"
+           rel="noopener noreferrer">
+            立即下载
+        </a>
+
+        <p class="tip">
+            刘昊制作
+        </p>
+        <p class="tip">
+            适配 Android 4.0 及以上版本<br>
+            点击自动跳转下载 ZIP 压缩包
+        </p>
+        <p class="test-tip">
+            内有.mp3,.lrc,.txt文件，还有一些赠品<br>
+            下载后先解压安装包再传至安卓点读笔
+        </p>
+    </div>
+
+    <!-- 可选：增加手动复制链接功能，防止下载失败 -->
+    <div style="max-width:380px;margin:20px auto;padding:0 20px;">
+        <p style="font-size:14px;color:#666;margin-bottom:8px;">若按钮无反应，手动复制下载链接：</p>
+        <input type="text" 
+               value="https://cdn.jsdelivr.net/gh/Diadia332/Diadia332.github.io/XieBeiFang.zip"
+               style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;font-size:13px;color:#333;"
+               onclick="this.select();">
+    </div>
+</body>
+</html>

@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>洗澡泡脚统计系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "微软雅黑", Arial, sans-serif;
+        }
+        body {
+            background-color: #f0f0f0;
+            padding: 20px;
+        }
+        .container {
+            width: 800px;
+            height: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            border: 1px solid #333;
+            display: flex;
+            flex-direction: column;
+        }
+        .header {
+            background-color: #444;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .main {
+            display: flex;
+            flex: 1;
+            padding: 10px;
+        }
+        .wash-col, .soak-col {
+            flex: 1;
+            border: 1px solid #999;
+            margin: 0 5px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+        .col-title {
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #ccc;
+        }
+        .current-wash {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        .timeout {
+            color: red;
+            font-weight: bold;
+        }
+        .countdown {
+            font-weight: bold;
+            color: #007bff;
+        }
+        .btn-finish-wash {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .queue-list {
+            flex: 1;
+            font-size: 13px;
+            line-height: 1.8;
+            overflow-y: auto;
+        }
+        .btn-book {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: auto;
+        }
+        .soak-status {
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        .soak-list {
+            flex: 1;
+            font-size: 13px;
+            line-height: 1.8;
+            overflow-y: auto;
+        }
+        .btn-finish-soak {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+        .footer {
+            text-align: center;
+            padding: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            border-top: 1px solid #ccc;
+        }
+        .soak-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 3px 0;
+            padding: 2px;
+            border-bottom: 1px dotted #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">洗澡泡脚统计</div>
+        <div class="main">
+            <!-- 左侧：单卫生间洗澡区 -->
+            <div class="wash-col">
+                <div class="col-title">洗澡</div>
+                <div class="current-wash">
+                    <span id="current-wash-text">空闲</span>
+                    <span id="wash-countdown" class="countdown"></span>
+                    <button id="btn-finish-wash" class="btn-finish-wash" onclick="finishWash()" style="display: none;">洗完了</button>
+                </div>
+                <div class="queue-list" id="wash-queue">
+                    进程列表:<br>
+                    无排队
+                </div>
+                <button class="btn-book" onclick="bookWash()">预约洗澡</button>
+            </div>
+
+            <!-- 右侧：多人泡脚区 -->
+            <div class="soak-col">
+                <div class="col-title">泡脚</div>
+                <div class="soak-status" id="soak-status">无泡脚进程</div>
+                <div class="soak-list" id="soak-list"></div>
+                <button class="btn-book" onclick="bookSoak()">预约泡脚</button>
+            </div>
+        </div>
+        <div class="footer" id="current-time"></div>
+    </div>
+
+    <script>
+        // 全局状态：单卫生间洗澡
+        let washState = {
+            current: null,   // 当前洗澡人
+            estimate: 0,     // 预估时间（分钟）
+            start: null,     // 开始时间
+            queue: []        // 排队列表，每个元素是 {name, estimate}
+        };
+
+        // 全局状态：多人泡脚（数组存储，支持同时泡）
+        let soakState = {
+            list: []         // 每个元素：{id, name, start}
+        };
+        let soakIdCounter = 1; // 泡脚人唯一ID，用于结束泡脚
+
+        // 更新时间、超时、泡脚计时、倒计时
+        function updateTime() {
+            const now = new Date();
+            document.getElementById("current-time").textContent = now.toLocaleTimeString();
+
+            // --- 洗澡超时检查 & 倒计时更新 ---
+            if (washState.current) {
+                const elapsed = (now - washState.start) / 1000; // 已用秒数
+                const totalEstimate = washState.estimate * 60; // 预估总秒数
+                const remaining = Math.max(0, totalEstimate - elapsed); // 剩余秒数
+
+                const washText = document.getElementById("current-wash-text");
+                const countdownEl = document.getElementById("wash-countdown");
+
+                // 格式化倒计时为 MM:SS
+                const mins = Math.floor(remaining / 60).toString().padStart(2, '0');
+                const secs = Math.floor(remaining % 60).toString().padStart(2, '0');
+                countdownEl.textContent = `(${mins}:${secs})`;
+
+                if (remaining <= 0) {
+                    washText.innerHTML = `${washState.current} <span class="timeout">(已超时)</span>`;
+                } else {
+                    washText.textContent = washState.current;
+                }
+            } else {
+                document.getElementById("wash-countdown").textContent = "";
+            }
+
+            // --- 多人泡脚计时更新（MM:SS）---
+            renderSoakList();
+        }
+
+        // ------------------------------
+        // 洗澡相关逻辑
+        // ------------------------------
+        // 渲染洗澡排队列表：等待时间=前面所有人预估时间之和
+        function renderWashQueue() {
+            const queueEl = document.getElementById("wash-queue");
+            if (washState.queue.length === 0) {
+                queueEl.innerHTML = "进程列表:<br>无排队";
+                return;
+            }
+
+            let html = "进程列表:<br>";
+            let waitTime = 0;
+
+            // 如果当前有人在洗，先加他的剩余时间
+            if (washState.current) {
+                const now = new Date();
+                const elapsed = (now - washState.start) / 60000;
+                waitTime = Math.max(0, Math.round(washState.estimate - elapsed));
+            }
+
+            // 遍历队列计算每个人的等待时间
+            for (let i = 0; i < washState.queue.length; i++) {
+                const item = washState.queue[i];
+                html += `${i+1}. ${item.name} 预计等 ${waitTime} 分钟<br>`;
+                waitTime += item.estimate;
+            }
+            queueEl.innerHTML = html;
+        }
+
+        // 洗完了：当前人完成，队列补位
+        function finishWash() {
+            if (!washState.current) return;
+            alert(`${washState.current} 洗完了！`);
+
+            if (washState.queue.length > 0) {
+                const next = washState.queue.shift();
+                washState.current = next.name;
+                washState.estimate = next.estimate;
+                washState.start = new Date();
+                document.getElementById("current-wash-text").textContent = washState.current;
+                document.getElementById("btn-finish-wash").style.display = "inline-block";
+            } else {
+                washState.current = null;
+                washState.estimate = 0;
+                washState.start = null;
+                document.getElementById("current-wash-text").textContent = "空闲";
+                document.getElementById("btn-finish-wash").style.display = "none";
+                document.getElementById("wash-countdown").textContent = "";
+            }
+            renderWashQueue();
+        }
+
+        // 预约洗澡
+        function bookWash() {
+            const name = prompt("请输入洗澡人姓名:");
+            if (!name) return;
+            const estimate = parseInt(prompt("请输入预估洗澡时间（分钟）:"));
+            if (!estimate || estimate <= 0) {
+                alert("请输入有效时间（大于0的数字）！");
+                return;
+            }
+
+            if (!washState.current) {
+                washState.current = name;
+                washState.estimate = estimate;
+                washState.start = new Date();
+                document.getElementById("current-wash-text").textContent = name;
+                document.getElementById("btn-finish-wash").style.display = "inline-block";
+                alert(`${name} 开始洗澡！`);
+            } else {
+                washState.queue.push({ name, estimate });
+                alert(`${name} 加入排队，当前排队人数：${washState.queue.length}`);
+            }
+            renderWashQueue();
+        }
+
+        // ------------------------------
+        // 泡脚相关逻辑（支持多人同时泡）
+        // ------------------------------
+        // 渲染泡脚列表：每个人独立计时，带“泡完了”按钮
+        function renderSoakList() {
+            const soakListEl = document.getElementById("soak-list");
+            const soakStatusEl = document.getElementById("soak-status");
+            
+            // 更新泡脚人数
+            soakStatusEl.textContent = `共 ${soakState.list.length} 人泡脚`;
+            
+            if (soakState.list.length === 0) {
+                soakListEl.innerHTML = "";
+                soakStatusEl.textContent = "无泡脚进程";
+                return;
+            }
+
+            let html = "";
+            const now = new Date();
+            soakState.list.forEach(item => {
+                // 计算已泡时间（MM:SS）
+                const elapsed = (now - item.start) / 1000;
+                const mins = Math.floor(elapsed / 60).toString().padStart(2, '0');
+                const secs = Math.floor(elapsed % 60).toString().padStart(2, '0');
+                
+                // 每个泡脚人一行，右侧带“泡完了”按钮
+                html += `
+                <div class="soak-item">
+                    <span>${item.name} 已泡 ${mins}:${secs}</span>
+                    <button class="btn-finish-soak" onclick="finishSoak(${item.id})">泡完了</button>
+                </div>
+                `;
+            });
+            soakListEl.innerHTML = html;
+        }
+
+        // 预约泡脚（新增，不覆盖原有）
+        function bookSoak() {
+            const name = prompt("请输入泡脚人姓名:");
+            if (!name) return;
+            
+            // 新增泡脚人，分配唯一ID
+            soakState.list.push({
+                id: soakIdCounter++,
+                name: name,
+                start: new Date()
+            });
+            
+            alert(`${name} 开始泡脚！当前泡脚总人数：${soakState.list.length}`);
+            renderSoakList();
+        }
+
+        // 结束指定人的泡脚
+        function finishSoak(soakId) {
+            // 找到并移除该泡脚人
+            const index = soakState.list.findIndex(item => item.id === soakId);
+            if (index === -1) return;
+            
+            const soakPerson = soakState.list[index].name;
+            soakState.list.splice(index, 1);
+            
+            alert(`${soakPerson} 泡完了！剩余泡脚人数：${soakState.list.length}`);
+            renderSoakList();
+        }
+
+        // 初始化
+        setInterval(updateTime, 1000); // 每秒更新
+        updateTime();
+        renderWashQueue();
+        renderSoakList();
+    </script>
+</body>
+</html>

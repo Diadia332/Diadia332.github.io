@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>音乐合集下载</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", Roboto, "Microsoft YaHei", sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f8f9fc 0%, #e9ecf2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            max-width: 520px;
+            width: 100%;
+            padding: 48px 36px;
+            text-align: center;
+        }
+
+        .icon {
+            font-size: 56px;
+            margin-bottom: 20px;
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 12px;
+        }
+
+        .info {
+            font-size: 15px;
+            color: #6b7280;
+            line-height: 1.6;
+            margin-bottom: 40px;
+        }
+
+        .download {
+            display: inline-block;
+            background-color: #2563eb;
+            color: #fff;
+            font-size: 17px;
+            font-weight: 500;
+            padding: 16px 48px;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        }
+
+        .download:hover {
+            background-color: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.25);
+        }
+
+        .tips {
+            margin-top: 28px;
+            font-size: 13px;
+            color: #9ca3af;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon">🎵</div>
+        <h1 class="title">音乐合集</h1>
+        <p class="info">Windows 专用音乐安装包<br>一键安装 · 简洁清爽 · 快速访问</p>
+        
+        <!-- 👇 这个链接会自动从 GitHub 下载你的 msi 文件 -->
+        <a href="肥美音乐合集.msi" class="download" target="_blank">📥 立即下载</a>
+
+        <p class="tips">支持 Windows 2000 以上版本<br>下载完成后双击安装</p>
+    </div>
+</body>
+</html>

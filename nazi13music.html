@@ -37,14 +37,12 @@
   .btn:hover { opacity: .8; }
   .btn svg { flex-shrink: 0; }
 
-  /* 主页面按钮配色 */
   .btn-yellow { border-color: #f5c518; background: rgba(245,197,24,.15); color: #fff; }
   .btn-red    { border-color: #e74c3c; background: rgba(231,76,60,.15); color: #fff; }
   .btn-purple { border-color: #9b59b6; background: rgba(155,89,182,.15); color: #fff; }
   .btn-green  { border-color: #2ecc71; background: rgba(0,0,0,.35); color: #7ed957; }
   .btn-blue   { border-color: #3498db; background: rgba(0,0,0,.35); color: #3db8ff; }
 
-  /* 弹窗 */
   .overlay {
     display: none;
     position: fixed;
@@ -76,44 +74,37 @@
   <h1>大山的子孙 音乐下载</h1>
   <p class="subtitle">多种格式下载</p>
 
-  <!-- 1. MP3 -->
   <button class="btn btn-yellow" onclick="openModal('mp3')">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
     MP3 音乐下载
   </button>
 
-  <!-- 2. WAV -->
   <button class="btn btn-yellow" onclick="openModal('wav')">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
     WAV 音乐下载
   </button>
 
-  <!-- 3. MP4 -->
   <button class="btn btn-red" onclick="openModal('mp4')">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
     MP4 视频下载
   </button>
 
-  <!-- 4. ZIP -->
-  <a class="btn btn-purple" href="大山的子孙_带歌词.zip" download>
+  <a class="btn btn-purple" href="https://github.com/Diadia332/Diadia332.github.io/releases/download/MUSIC/music_with_lrc.zip" download>
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8v13H3V8"/><path d="M1 3h22v5H1z"/><path d="M10 12h4"/></svg>
     ZIP 带歌词下载
   </a>
 
-  <!-- 5. APK -->
   <button class="btn btn-green" onclick="notAvailable()">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 16V9a7 7 0 0 1 14 0v7"/><path d="M3 16h18v4H3z"/><line x1="8" y1="5" x2="6" y2="3"/><line x1="16" y1="5" x2="18" y2="3"/></svg>
     APK （下载不可用）
   </button>
 
-  <!-- 6. EXE -->
   <button class="btn btn-blue" onclick="notAvailable()">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="8"/><rect x="13" y="3" width="8" height="8"/><rect x="3" y="13" width="8" height="8"/><rect x="13" y="13" width="8" height="8"/></svg>
     EXE （下载不可用）
   </button>
 </div>
 
-<!-- 弹窗 -->
 <div class="overlay" id="overlay" onclick="if(event.target===this)closeModal()">
   <div class="modal">
     <p>有3种质量，请按需下载</p>
@@ -124,19 +115,19 @@
 <script>
 const data = {
   mp3: [
-    { label: "高质量 下载（10.64MB）", file: "大山的子孙_高质量版.mp3", cls: "btn-yellow" },
-    { label: "中质量 下载（2.56MB）",  file: "大山的子孙_中质量版.mp3", cls: "btn-yellow" },
-    { label: "低质量 下载（0.26MB）",  file: "大山的子孙_低质量版.mp3", cls: "btn-yellow" }
+    { label: "高质量 下载（10.64MB）", url: "https://github.com/Diadia332/Diadia332.github.io/releases/download/MUSIC/music_high_version.mp3", cls: "btn-yellow" },
+    { label: "中质量 下载（2.56MB）",  url: "https://github.com/Diadia332/Diadia332.github.io/releases/download/MUSIC/music_basic_version.mp3", cls: "btn-yellow" },
+    { label: "低质量 下载（0.26MB）",  url: "https://github.com/Diadia332/Diadia332.github.io/releases/download/MUSIC/music_low_version.mp3", cls: "btn-yellow" }
   ],
   wav: [
-    { label: "高质量 下载（45.14MB）", file: "大山的子孙_高质量版.wav", cls: "btn-yellow" },
-    { label: "中质量 下载（11.21MB）", file: "大山的子孙_中质量版.wav", cls: "btn-yellow" },
-    { label: "低质量 下载（1.41MB）",  file: "大山的子孙_低质量版.wav", cls: "btn-yellow" }
+    { label: "高质量 下载（45.14MB）", url: "https://github.com/Diadia332/Diadia332.github.io/releases/download/MUSIC/nazi_music_high.wav", cls: "btn-yellow" },
+    { label: "中质量 下载（11.21MB）", url: "https://github.com/Diadia332/Diadia332.github.io/releases/download/MUSIC/nazi_music_basic.wav", cls: "btn-yellow" },
+    { label: "低质量 下载（1.41MB）",  url: "https://github.com/Diadia332/Diadia332.github.io/releases/download/MUSIC/nazi_music_low.wav", cls: "btn-yellow" }
   ],
   mp4: [
-    { label: "高质量 下载（51.43MB）", file: "大山的子孙_高质量版.mp4", cls: "btn-red" },
-    { label: "中质量 下载（10.64MB）", file: "大山的子孙_中质量版.mp4", cls: "btn-red" },
-    { label: "低质量 下载（2.60MB）",  file: "大山的子孙_低质量版.mp4", cls: "btn-red" }
+    { label: "高质量 下载（51.43MB）", url: "https://github.com/Diadia332/Diadia332.github.io/releases/download/MUSIC/video_high_version.mp4", cls: "btn-red" },
+    { label: "中质量 下载（10.64MB）", url: "https://github.com/Diadia332/Diadia332.github.io/releases/download/MUSIC/video_basic_version.mp4", cls: "btn-red" },
+    { label: "低质量 下载（2.60MB）",  url: "https://github.com/Diadia332/Diadia332.github.io/releases/download/MUSIC/video_low_version.mp4", cls: "btn-red" }
   ]
 };
 
@@ -149,7 +140,7 @@ function openModal(type) {
   list.forEach(item => {
     const a = document.createElement("a");
     a.className = "btn " + item.cls;
-    a.href = item.file;
+    a.href = item.url;
     a.download = "";
     a.innerHTML = downloadIcon + item.label;
     box.appendChild(a);
